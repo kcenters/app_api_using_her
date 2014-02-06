@@ -1,0 +1,16 @@
+<style> 
+.smaller_image img
+{
+	height:50px;
+	width:50px;
+}
+
+</style> 
+
+<div>
+<%= @group.name %> 
+</div>
+
+<div>
+ <%= link_to image_tag("/assets/previous.png"), "/groups" , id: "previous_button", class: "smaller_image" %> 
+</div>

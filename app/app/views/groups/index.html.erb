@@ -1,0 +1,31 @@
+<style> 
+.smaller_image img
+{
+	height:50px;
+	width:50px;
+}
+
+</style> 
+
+<table class="table table-bordered table-striped size_table" style="width:1000px;margin-left:20px;margin-top:20px"> 
+<tr>
+<th>Name</th><th> Edit</th>
+</tr> 
+<% if @groups.present? %>
+	<% @groups.each do |group| %> 
+		<tr id="group_<%= group.id %>" class="command_line">
+			<td><%= group.name %></td>
+			<td><%= link_to image_tag("/assets/editbutton.png"), edit_group_path(group), class: "smaller_image" %></td>
+		</tr>
+	<% end %> 
+<% else %> 
+	<tr><td>No groups found</td><td></td><tr>
+<% end %> 
+
+</table>
+
+<div class="button_section" style="margin-left:20px">
+<%= link_to "Add New Group", new_group_path, class: "btn btn-primary" %>
+</div>
+
+ 
