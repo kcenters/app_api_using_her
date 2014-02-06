@@ -4,6 +4,9 @@ app_api_using_her
 UI APP coumminicating with a Grape API mounted In rails using Her.
 
 
+
+API
+=================
 First I created the API using the tutorial from this repository: 
 https://github.com/chitsaou/oauth2-api-sample
 
@@ -56,3 +59,50 @@ module V1
   end
 end
 
+
+The get "" method allows the user from the app to retrieve all groups. 
+The get ":id" method allows the user to retrieve a specific group. 
+The put ":id" method allows the user in the app to edit and change fields 
+The post "" allows the user in the app to create a new group 
+
+As it stands right now, the API is unprotected. If you want to secure the api simply uncomment the guard_all method. 
+
+
+APP
+=================
+Navigate out of the proof_of_concept_oauth_api_doorkeeper to the app directory. 
+
+For the app side of things, you just simply create a new app. Once you set up your authorization. In order to communicate with the API I used the gem called her. Add this line to your gemfile: 
+
+gem "her"
+
+
+Next in config/initializers create a file called her.rb and paste in this code: 
+
+# Configure Her
+Her::API.setup :url => "http://localhost:3001/api/v1" do |c|
+  c.use Faraday::Request::UrlEncoded
+  c.use Her::Middleware::DefaultParseJSON
+  c.use Faraday::Response::Logger, $logger
+  c.use Faraday::Adapter::NetHttp
+end
+
+
+As you can see the API.setup url will point to the api project running on port 3001.
+
+Now in your app/models directory create a file called Group.rb and place this code inside
+
+ class Group 
+ 	include Her::Model
+
+  	# Parsing options
+  	parse_root_in_json true
+  	include_root_in_json true
+  	
+ 	# Attributes
+  	attributes :id, :name
+ end
+ 
+This tells us that the Group model will be using the API's Group model. The attributes at the end of the code tells us which attributes we are going to bring back to display to the user on the front end. 
+
+After that,  in the app/controllers section inside groups_controller,  you can create your basic CRUD functions. Same applies to the views. Now whenever you do Group.all it should allow you to display data from the Group model in the api onto the page in the app. 
